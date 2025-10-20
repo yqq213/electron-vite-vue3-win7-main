@@ -1,0 +1,1 @@
+例如： 电导分析仪的  留下index1.js 删掉其他的 并把index1.js 改为index.js

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="./favicon.png">
+  <link rel="stylesheet" href="./css/index.css">
+  <script src="./js/common.js"></script>
+  <script src="./js/http.js"></script>
+  <script src="./js/index.js"></script>
+  <title>数据录入</title>
+</head>
+
+<body>
+  <img src="./assets/doc/smile.png" id="iconSmileEl" width="100" height="100" alt="" style="display: none;">
+  <div class="topSearch">
+    <label>
+      登记流水号：<input type="text" id="serialNumberEl" name="serialNumber" required value="674E6TJDH20241219002">
+      <button id="searchBtnEl" class=" searchBtn" type="button">搜索</button>
+    </label>
+    <!-- 测试数据     674E6TJDH20241219002 -->
+    &nbsp;&nbsp;&nbsp;&nbsp;键盘直接输入条码后，请按Enter键查找人员信息
+  </div>
+  <form id="formEl">
+    <h3 class="boxTitle">人员信息</h3>
+    <div class="box userInfo">
+      <div class="row">
+        <div class="infoItem">
+          <label class="label">体检编号:
+            <input type="text" name="healthNo" class="value" disabled value="">
+          </label>
+        </div>
+        <div class="infoItem mr0">
+          <label class="label">姓名:
+            <input type="text" name="name" class="value" disabled>
+          </label>
+        </div>
+        <div class="infoItem mr0" style="display: flex;align-items: center;">
+          <label class="label">性别:
+            <!-- <span style="display: flex;align-items: center;">
+              <input type="radio" name="sex" value="0" style="margin-left: 6px;">男
+              <input type="radio" name="sex" value="1"  style="margin-left: 6px;">女
+            </span> -->
+            <input type="text" name="sex" class="value" disabled>
+          </label>
+        </div>
+        <div class="infoItem mr0">
+          <label class="label">年龄:
+            <input type="text" name="age" class="value" disabled>
+          </label>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="infoItem mr0">
+          <label class="label">体检次数:
+            <input type="text" name="examTimes" class="value">
+          </label>
+        </div>
+        <div class="infoItem mr0">
+          <label class="label">单位:
+            <input type="text" name="workUnit" class="value">
+          </label>
+        </div>
+        <div class="infoItem mr0">
+          <label class="label">所选组合项目:
+            <select name="type" style="width: 120px;" class="value" disabled>
+              <!-- selected 代表选中 修改这里-->
+              <option value="1">电导分析仪</option>
+              <option value="2">骨密度仪器</option>
+              <option value="3">人体成分仪</option>
+              <option value="4">动脉硬化</option>
+              <option value="5">心电图</option>
+            </select>
+          </label>
+
+        </div>
+
+      </div>
+    </div>
+    <h3 class="boxTitle">参考结果</h3>
+    <div class="box result">
+      <div class="resultLeft" id="resultListEl">
+        <div class="resItem"><i class="iconSmile"></i>未检</div>
+        <div class="resItem"><i class="iconSmile"></i>检测正常</div>
+        <div class="resItem"><i class="iconSmile"></i>骨量减少</div>
+        <div class="resItem"><i class="iconSmile"></i>骨质疏松</div>
+        <div class="resItem"><i class="iconSmile"></i>是最高平均值的%</div>
+        <div class="resItem"><i class="iconSmile"></i>是同龄人的%</div>
+        <div class="resItem"><i class="iconSmile"></i>骨量流失</div>
+        <div class="resItem"><i class="iconSmile"></i>但与同龄人相比正常</div>
+      </div>
+      <div class="icon">>></div>
+      <div class="resultRight">
+        <div class="rightTop">
+          <div class="title">检查结果&nbsp;/&nbsp;图片存储目录有：<span id="imgCountEl">1</span>&nbsp;张图片</div>
+          <textarea class="inputContent" id="resultContentEl" name="result"></textarea>
+          <button class="btn resultBtn" type="button" id="clearResultBtnEl">清除</button>
+        </div>
+        <div class="rightBottom">
+          <div class="title">诊断意见</div>
+          <textarea class="inputContent" name="remark"></textarea>
+          <button class="btn diagnosisBtn" type="button" id="clearDiagnosisBtnEl">清除</button>
+        </div>
+      </div>
+    </div>
+    <div class="box button">
+      <div class="row">
+        <div class="infoItem">
+          <label class="label">检查日期:
+            <input type="date" id="checkDateEl" class="value " name="checkDate" disabled>
+          </label>
+        </div>
+        <div class="infoItem mr0">
+          <label class="label">检查医生:
+            <input type="text" class="value" name="doctorName">
+          </label>
+        </div>
+        <div class="infoItem ">
+          <button class="btn" type="button" id="clearBtnEl">清除</button>
+        </div>
+        <div class="infoItem ">
+          <button class="btn" type="submit" id="saveBtnEl">保存</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+
+  <div class="_tooltip_" id="tooltip">这是一个提示信息!</div>
+</body>
+
+</html>

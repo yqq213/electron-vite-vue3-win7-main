@@ -28,9 +28,9 @@ function createWindow() {
     path.resolve(__dirname, '../plugins/vuetools6.5.1')
   )
   win = new BrowserWindow({
-    width: 1300,
-    height: 800,
-    minWidth: 1000,
+    width: 1000,
+    height: 700,
+    minWidth: 860,
     minHeight: 600,
     icon: path.join(process.env.VITE_PUBLIC as string, 'electron-vite.svg'),
     webPreferences: {
@@ -53,11 +53,9 @@ function createWindow() {
     //版本更新
   })
 
-  win.webContents.openDevTools()
-
   if (VITE_DEV_SERVER_URL) {
     // win.loadURL(VITE_DEV_SERVER_URL)
-    // win.webContents.openDevTools()
+    win.webContents.openDevTools()
     win.loadFile('lixin/index.html')
   } else {
     win.loadFile('lixin/index.html')

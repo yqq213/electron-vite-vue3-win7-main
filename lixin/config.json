@@ -1,0 +1,10 @@
+{
+    "device": 3,
+    "doctorName": "张三",
+    "baseUrl": "http://172.18.3.82:20082/prod-api",
+    "adviceList": [
+        "未检",
+        "检测正常",
+        "骨量减少"
+    ]
+}

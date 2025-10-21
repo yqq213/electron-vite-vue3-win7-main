@@ -1,0 +1,76 @@
+// 公共样式
+body {
+  padding: 12px;
+  font-size: 14px;
+}
+.underlineCenter {
+  display: inline-block;
+  border-bottom: 1px solid currentColor;
+  text-align: center;
+}
+
+.underlineLeft {
+  display: inline-block;
+  border-bottom: 1px solid black;
+  text-align: left;
+  padding-left: 4px;
+}
+
+.row {
+  display: flex;
+}
+
+.mr0 {
+  margin-right: 0;
+}
+
+.btn {
+  display: inline-block;
+  margin: 5px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  background-color: #14a9ff;
+  color: white;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+/* 提示框基础样式 */
+._tooltip_ {
+  display: none;
+  position: fixed; /* 固定位置 */
+  padding: 10px 20px; /* 内边距 */
+  border-radius: 4px; /* 圆角 */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* 阴影效果 */
+  font-size: 14px; /* 字体大小 */
+  white-space: nowrap; /* 不换行 */
+  z-index: 1000; /* 保证在最上层 */
+  transition: opacity 0.3s, transform 0.3s; /* 动效 */
+  opacity: 0; /* 初始透明度 */
+  transform: translateY(-10px); /* 初始位置 */
+}
+
+/* 不同状态的样式 */
+._tooltip_.success {
+  background-color: rgba(76, 175, 80, 0.8); /* 成功状态绿 */
+  color: #ffffff; /* 文字颜色 */
+}
+
+._tooltip_.error {
+  background-color: rgba(244, 67, 54, 0.8); /* 错误状态红 */
+  color: #ffffff; /* 文字颜色 */
+}
+
+._tooltip_.warning {
+  background-color: rgba(255, 152, 0, 0.8); /* 警告状态橙 */
+  color: #ffffff; /* 文字颜色 */
+}
+
+._tooltip_.info {
+  background-color: rgba(33, 150, 243, 0.8); /* 信息状态蓝 */
+  color: #ffffff; /* 文字颜色 */
+}

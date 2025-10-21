@@ -145,7 +145,6 @@ body {
   align-items: center;
   height: 20px;
   line-height: 20px;
-  margin-bottom: 14px;
   margin-right: 16px;
   flex-wrap: nowrap;
 }
@@ -154,7 +153,8 @@ body {
   white-space: nowrap;
 }
 .userInfo .infoItem .value {
-  min-width: 180px;
+  /* min-width: 180px; */
+  width: 12vw;
 }
 .result {
   display: flex;
@@ -265,5 +265,6 @@ body {
   white-space: nowrap;
 }
 .button .infoItem .value {
-  min-width: 180px;
+  min-width: 100px;
+  width: 9vw;
 }

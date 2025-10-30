@@ -3,6 +3,8 @@ import Store from 'electron-store'
 import path from 'node:path'
 import { checkUpdate } from './update'
 import Logger from 'electron-log'
+const { devTools } = require('../lixin/config.json')
+console.log('devTools', devTools)
 // The built directory structure
 //
 // ├─┬─┬ dist
@@ -28,9 +30,9 @@ function createWindow() {
     path.resolve(__dirname, '../plugins/vuetools6.5.1')
   )
   win = new BrowserWindow({
-    width: 1000,
+    width: 1100,
     height: 700,
-    minWidth: 860,
+    minWidth: 900,
     minHeight: 600,
     icon: path.join(process.env.VITE_PUBLIC as string, 'electron-vite.svg'),
     webPreferences: {
@@ -39,7 +41,7 @@ function createWindow() {
       // nodeIntegration:true,
       // contextIsolation:false
     },
-    autoHideMenuBar: true // 添加这一行来自动隐藏菜单栏
+    autoHideMenuBar: !devTools // 添加这一行来自动隐藏菜单栏
   })
 
   try {
@@ -134,3 +136,26 @@ ipcMain.on(
     ;(store.set as (...args: any[]) => void)(...args)
   }
 )
+
+/**关闭应用 */
+ipcMain.on('close-app', () => {
+  app.quit()
+})
+
+/**获取指定目录下的文件列表 */
+ipcMain.handle('read-dir', async (event, dirPath) => {
+  const fs = await import('fs')
+  const path = await import('path')
+  try {
+    // 获取目录的绝对路径
+    const fullPath = path.join(__dirname, '../', dirPath)
+    // 读取目录内容
+    const files = fs.readdirSync(fullPath)
+    const imageFiles = files.filter(file => file.startsWith('体检结果'))
+    // 返回完整的相对路径
+    return imageFiles.map(file => path.join(dirPath, file).replace(/\\/g, '/'))
+  } catch (error) {
+    console.error('读取目录失败:', error)
+    return []
+  }
+})

@@ -31,4 +31,17 @@
   </div>
 </body>
 
+<script>
+  window.onload = function() {
+    // 3秒后自动关闭应用
+    setTimeout(function () {
+      if (typeof window.ipcRenderer !== 'undefined') {
+        window.ipcRenderer.send('close-app');
+      } else {
+        window.close();
+      }
+    }, 3000);
+  }
+</script>
+
 </html>

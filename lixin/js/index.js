@@ -6,8 +6,10 @@
 var baseUrl = ''
 
 //电导分析仪1张  骨密度1张  人体成分1张  动脉硬化项目2张    心电图1张
-var _imageUrls = ['assets/doc/体检结果.png', 'assets/doc/体检结果2.png'] // 多张图片路径
-// var _imageUrls = ['./assets/doc/体检结果.png']; // 单张图片路径
+// var _imageUrls = ['assets/doc/体检结果.png', 'assets/doc/体检结果2.png'] // 多张图片路径
+// var _imageUrls = ['assets/doc/体检结果.png']; // 单张图片路径
+// 通过IPC获取/lixin/assets/doc目录下的所有图片
+var _imageUrls = [] // 多张图片路径
 
 // 组合项目类型： 1 电导分析仪   2 骨密度  3 人体成分  4 动脉硬化   5 心电图
 var _projectType = 1
@@ -46,6 +48,32 @@ document.addEventListener('DOMContentLoaded', function () {
 })
 
 function init() {
+  // 通过IPC获取图片列表
+  if (typeof window.ipcRenderer !== 'undefined') {
+    window.ipcRenderer
+      .invoke('read-dir', 'lixin/assets/doc')
+      .then(function (imageUrls) {
+        for (var i = 0; i < imageUrls.length; i++) {
+          _imageUrls.push(imageUrls[i].replace('lixin/', ''))
+        }
+        console.log('获取到的图片列表:', _imageUrls)
+        // 继续其他初始化逻辑
+        initializeComponents()
+      })
+      .catch(function (error) {
+        console.error('获取图片列表失败:', error)
+        // 如果获取失败，使用默认图片列表
+        _imageUrls = ['assets/doc/体检结果.png', 'assets/doc/体检结果2.png']
+        initializeComponents()
+      })
+  } else {
+    // 如果不在Electron环境中，使用默认图片列表
+    _imageUrls = ['assets/doc/体检结果.png', 'assets/doc/体检结果2.png']
+    initializeComponents()
+  }
+}
+
+function initializeComponents() {
   var searchEl = $$('#serialNumberEl')
   var formEl = $$('#formEl')
   var resultListEl = $$('#resultListEl')
@@ -57,6 +85,11 @@ function init() {
   var clearResultBtnEl = $$('#clearResultBtnEl')
   var imgCountEl = $$('#imgCountEl')
   var blobs = [] // 用于存储 Blob 对象
+  
+  // 更新图片计数显示
+  if (imgCountEl) {
+    imgCountEl.innerText = _imageUrls.length
+  }
 
   // 根据adviceList动态渲染参考结果
   resultListEl.innerHTML = ''
@@ -122,7 +155,7 @@ function init() {
     formEl.name.value = inputData.name
     formEl.sex.value = sex
     formEl.age.value = inputData.age
-    formEl.workUnit.value = inputData.workUnit
+    // formEl.workUnit.value = inputData.workUnit
     // formEl.type.value = inputData.type;
     return inputData
   }
@@ -137,6 +170,7 @@ function init() {
   // 保存表单数据
   saveBtnEl.addEventListener('click', function (e) {
     e.preventDefault()
+    window.location.href = 'success.html'
     // console.log(formEl)
     if (!formEl.healthNo.value) {
       showTooltip('请先填写人员信息', 'warning')
@@ -168,8 +202,8 @@ function init() {
           : formElNew.sex.value == '女'
             ? '1'
             : '',
-      workUnit: formElNew.workUnit.value,
-      examTimes: formElNew.examTimes.value,
+      // workUnit: formElNew.workUnit.value,
+      // examTimes: formElNew.examTimes.value,
       type: formElNew.type.value,
       ossId: ossIdSplit,
       ossUrl: urlSplit,

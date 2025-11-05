@@ -9,7 +9,7 @@
   directories: {
     output: 'release/${version}'
   },
-  files: ['dist', 'dist-electron', 'lixin'],
+  files: ['dist', 'dist-electron', 'config'],
   mac: {
     target: ['dmg'],
     artifactName: '${productName}-Mac-${version}-Installer.${ext}'

@@ -22,39 +22,48 @@ var adviceList = []
 
 var http = createHttpRequest()
 
-// 动态加载 JavaScript 文件
-document.addEventListener('DOMContentLoaded', function () {
-  var xhr = new XMLHttpRequest()
-  xhr.open('GET', './config.json', true)
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200) {
-        try {
-          var config = JSON.parse(xhr.responseText)
-          _projectType = config.device
-          defaultDoctorName = config.doctorName
-          baseUrl = config.baseUrl
-          adviceList = config.adviceList || []
-          init()
-        } catch (error) {
-          console.error('Error parsing config.json:', error)
-        }
-      } else {
-        console.error('Error loading config.json:', xhr.statusText)
-      }
-    }
-  }
-  xhr.send()
+// 读取配置文件
+window.ipcRenderer.invoke('read-config').then(function (config) {
+  _projectType = config.device
+  defaultDoctorName = config.doctorName
+  baseUrl = config.baseUrl
+  adviceList = config.adviceList || []
+  init()
 })
+
+// // 动态加载 JavaScript 文件
+// document.addEventListener('DOMContentLoaded', function () {
+//   var xhr = new XMLHttpRequest()
+//   xhr.open('GET', './config.json', true)
+//   xhr.onreadystatechange = function () {
+//     if (xhr.readyState === 4) {
+//       if (xhr.status === 200) {
+//         try {
+//           var config = JSON.parse(xhr.responseText)
+//           _projectType = config.device
+//           defaultDoctorName = config.doctorName
+//           baseUrl = config.baseUrl
+//           adviceList = config.adviceList || []
+//           init()
+//         } catch (error) {
+//           console.error('Error parsing config.json:', error)
+//         }
+//       } else {
+//         console.error('Error loading config.json:', xhr.statusText)
+//       }
+//     }
+//   }
+//   xhr.send()
+// })
 
 function init() {
   // 通过IPC获取图片列表
   if (typeof window.ipcRenderer !== 'undefined') {
     window.ipcRenderer
-      .invoke('read-dir', 'lixin/assets/doc')
+      .invoke('read-dir', 'config/assets/doc')
       .then(function (imageUrls) {
         for (var i = 0; i < imageUrls.length; i++) {
-          _imageUrls.push(imageUrls[i].replace('lixin/', ''))
+          _imageUrls.push(imageUrls[i].replace('config/', ''))
         }
         console.log('获取到的图片列表:', _imageUrls)
         // 继续其他初始化逻辑
@@ -170,12 +179,10 @@ function initializeComponents() {
   // 保存表单数据
   saveBtnEl.addEventListener('click', function (e) {
     e.preventDefault()
-    window.location.href = 'success.html'
-    // console.log(formEl)
-    if (!formEl.healthNo.value) {
-      showTooltip('请先填写人员信息', 'warning')
-      return void 0
-    }
+    // if (!formEl.healthNo.value) {
+    //   showTooltip('请先填写人员信息', 'warning')
+    //   return void 0
+    // }
     // 先去上传图片
     // createObjectURL()
     uploadImgHandelFn()

@@ -3,8 +3,7 @@ import Store from 'electron-store'
 import path from 'node:path'
 import { checkUpdate } from './update'
 import Logger from 'electron-log'
-const { devTools } = require('../lixin/config.json')
-console.log('devTools', devTools)
+const configJson = require('../config/config.json')
 // The built directory structure
 //
 // ├─┬─┬ dist
@@ -41,7 +40,7 @@ function createWindow() {
       // nodeIntegration:true,
       // contextIsolation:false
     },
-    autoHideMenuBar: !devTools // 添加这一行来自动隐藏菜单栏
+    autoHideMenuBar: !configJson.devTools // 添加这一行来自动隐藏菜单栏
   })
 
   try {
@@ -55,12 +54,15 @@ function createWindow() {
     //版本更新
   })
 
+  // win.loadURL(configJson.h5Url)
+  win.loadFile('hard-tool/index.html')
+
   if (VITE_DEV_SERVER_URL) {
     // win.loadURL(VITE_DEV_SERVER_URL)
     win.webContents.openDevTools()
-    win.loadFile('lixin/index.html')
+    // win.loadFile('lixin/index.html')
   } else {
-    win.loadFile('lixin/index.html')
+    // win.loadFile('lixin/index.html')
     // win.loadFile(path.join(process.env.DIST as string, 'index.html'))
   }
   // 打开配置页面
@@ -151,11 +153,16 @@ ipcMain.handle('read-dir', async (event, dirPath) => {
     const fullPath = path.join(__dirname, '../', dirPath)
     // 读取目录内容
     const files = fs.readdirSync(fullPath)
-    const imageFiles = files.filter(file => file.startsWith('体检结果'))
-    // 返回完整的相对路径
-    return imageFiles.map(file => path.join(dirPath, file).replace(/\\/g, '/'))
+    const imageFiles = files.filter(file => file.startsWith('examResult'))
+    // 返回完整的绝对路径
+    // return imageFiles.map(file => path.join(dirPath, file).replace(/\\/g, '/'))
   } catch (error) {
     console.error('读取目录失败:', error)
     return []
   }
+})
+
+/**获取配置文件 */
+ipcMain.handle('read-config', () => {
+  return configJson
 })

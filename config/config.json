@@ -7,5 +7,6 @@
         "检测正常",
         "骨量减少"
     ],
-    "devTools": true
+    "devTools": true,
+    "h5Url": "http://223.240.103.241:9003/safety-bigscreen/hard-tool/"
 }

@@ -1,12 +1,38 @@
 {
-    "device": 3,
-    "doctorName": "张三",
-    "baseUrl": "http://172.18.3.82:20082/prod-api",
-    "adviceList": [
-        "未检",
-        "检测正常",
-        "骨量减少"
+    "deviceList": [
+        {
+            "deviceCode": 1,
+            "adviceList": ["未检"],
+            "doctorName": "张三1"
+        },
+        {
+            "deviceCode": 2,
+            "adviceList": ["未检", "检测正常"],
+            "doctorName": "张三2"
+        },
+        {
+            "deviceCode": 3,
+            "adviceList": ["未检", "检测正常", "骨量减少"],
+            "doctorName": "张三3"
+        },
+        {
+            "deviceCode": 4,
+            "adviceList": ["未检"],
+            "doctorName": "张三4"
+        },
+        {
+            "deviceCode": 5,
+            "adviceList": ["未检", "检测正常"],
+            "doctorName": "张三5"
+        },
+        {
+            "deviceCode": 6,
+            "adviceList": ["未检", "检测正常", "骨量减少"],
+            "doctorName": "张三6"
+        }
     ],
+    "defaultDeviceCode": 6,
+    "baseUrl": "http://172.18.3.82:20082/prod-api",
     "devTools": true,
     "h5Url": "http://223.240.103.241:9003/safety-bigscreen/hard-tool/"
 }

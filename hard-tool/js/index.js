@@ -3,7 +3,7 @@
 // var baseUrl = 'http://172.16.2.54:20090' //WT
 // var baseUrl = 'http://59.36.171.126:20082'; //DEV
 // var baseUrl = 'http://172.18.3.82:20082/prod-api'; //LiXin_env
-var baseUrl = ''
+var baseUrl = '/prod-api'
 
 //电导分析仪1张  骨密度1张  人体成分1张  动脉硬化项目2张    心电图1张
 // var _imageUrls = ['assets/doc/体检结果.png', 'assets/doc/体检结果2.png'] // 多张图片路径
@@ -20,14 +20,24 @@ var defaultDoctorName = ''
 // 建议列表
 var adviceList = []
 
+// 配置文件中缓存deviceList
+var deviceList = []
+
 var http = createHttpRequest()
 
 // 读取配置文件
 window.ipcRenderer.invoke('read-config').then(function (config) {
-  _projectType = config.device
-  defaultDoctorName = config.doctorName
-  baseUrl = config.baseUrl
-  adviceList = config.adviceList || []
+  _projectType = config.defaultDeviceCode
+  deviceList = config.deviceList
+  for (var i = 0; i < config.deviceList.length; i++) {
+    if (config.deviceList[i].deviceCode == _projectType) {
+      defaultDoctorName = config.deviceList[i].doctorName
+      adviceList = config.deviceList[i].adviceList
+    }
+  }
+  // defaultDoctorName = config.deviceList
+  // baseUrl = config.baseUrl
+  // adviceList = config.adviceList || []
   init()
 })
 
@@ -62,22 +72,22 @@ function init() {
     window.ipcRenderer
       .invoke('read-dir', 'config/assets/doc')
       .then(function (imageUrls) {
-        for (var i = 0; i < imageUrls.length; i++) {
-          _imageUrls.push(imageUrls[i].replace('config/', ''))
-        }
-        console.log('获取到的图片列表:', _imageUrls)
+        // for (var i = 0; i < imageUrls.length; i++) {
+        //   _imageUrls.push(imageUrls[i].replace('config/', ''))
+        // }
+        _imageUrls = imageUrls
         // 继续其他初始化逻辑
         initializeComponents()
       })
       .catch(function (error) {
         console.error('获取图片列表失败:', error)
         // 如果获取失败，使用默认图片列表
-        _imageUrls = ['assets/doc/体检结果.png', 'assets/doc/体检结果2.png']
+        // _imageUrls = ['assets/doc/体检结果.png', 'assets/doc/体检结果2.png']
         initializeComponents()
       })
   } else {
     // 如果不在Electron环境中，使用默认图片列表
-    _imageUrls = ['assets/doc/体检结果.png', 'assets/doc/体检结果2.png']
+    // _imageUrls = ['assets/doc/体检结果.png', 'assets/doc/体检结果2.png']
     initializeComponents()
   }
 }
@@ -100,15 +110,30 @@ function initializeComponents() {
     imgCountEl.innerText = _imageUrls.length
   }
 
-  // 根据adviceList动态渲染参考结果
-  resultListEl.innerHTML = ''
-  adviceList.forEach(function (item) {
-    var div = document.createElement('div');
-    div.className = 'resItem'
-    div.innerHTML = '<i class="iconSmile"></i>' + item;
-    resultListEl.appendChild(div)
-  })
+  function renderAdvice() {
+    // 根据adviceList动态渲染参考结果
+    resultListEl.innerHTML = ''
+    adviceList.forEach(function (item) {
+      var div = document.createElement('div');
+      div.className = 'resItem'
+      div.innerHTML = '<i class="iconSmile"></i>' + item;
+      resultListEl.appendChild(div)
+    })
+  }
 
+  renderAdvice()
+
+  // 切换所选组合项目
+  formEl.type.onchange = function () {
+    for (var i = 0; i < deviceList.length; i++) {
+      if (deviceList[i].deviceCode == formEl.type.value) {
+        defaultDoctorName = deviceList[i].doctorName
+        formEl.doctorName.value = defaultDoctorName
+        adviceList = deviceList[i].adviceList
+        renderAdvice()
+      }
+    }
+  }
 
   // 初始检查日期
   checkDateEl.value = getFormattedDate()
@@ -123,7 +148,7 @@ function initializeComponents() {
       // return void 0;
       // 获取表单数据
       http.get(
-        baseUrl + '/api/inspectionResults/getUserInfo/' + query,
+        baseUrl + '/api/inspectionResults/getUserInfo/' + query + '?t=' + new Date().getTime(),
         function (error, response) {
           if (error) {
             console.error(error)
@@ -179,10 +204,10 @@ function initializeComponents() {
   // 保存表单数据
   saveBtnEl.addEventListener('click', function (e) {
     e.preventDefault()
-    // if (!formEl.healthNo.value) {
-    //   showTooltip('请先填写人员信息', 'warning')
-    //   return void 0
-    // }
+    if (!formEl.healthNo.value) {
+      showTooltip('请先填写人员信息', 'warning')
+      return void 0
+    }
     // 先去上传图片
     // createObjectURL()
     uploadImgHandelFn()

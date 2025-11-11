@@ -54,8 +54,8 @@ function createWindow() {
     //版本更新
   })
 
-  // win.loadURL(configJson.h5Url)
-  win.loadFile('hard-tool/index.html')
+  win.loadURL(configJson.h5Url)
+  // win.loadFile('hard-tool/index.html')
 
   if (VITE_DEV_SERVER_URL) {
     // win.loadURL(VITE_DEV_SERVER_URL)
@@ -153,9 +153,20 @@ ipcMain.handle('read-dir', async (event, dirPath) => {
     const fullPath = path.join(__dirname, '../', dirPath)
     // 读取目录内容
     const files = fs.readdirSync(fullPath)
-    const imageFiles = files.filter(file => file.startsWith('examResult'))
-    // 返回完整的绝对路径
-    // return imageFiles.map(file => path.join(dirPath, file).replace(/\\/g, '/'))
+    const imageFiles = files.filter(file => file.startsWith('体检结果'))
+    // 将图片文件转换为base64格式数组
+    const base64Array: string[] = []
+    for (const file of imageFiles) {
+      const filePath = path.join(fullPath, file)
+      try {
+        const fileData = fs.readFileSync(filePath)
+        const base64 = fileData.toString('base64')
+        base64Array.push(`data:image/png;base64,${base64}`)
+      } catch (error) {
+        console.error(`读取文件 ${file} 失败:`, error)
+      }
+    }
+    return base64Array
   } catch (error) {
     console.error('读取目录失败:', error)
     return []

@@ -104,6 +104,9 @@ function initializeComponents() {
   var clearResultBtnEl = $$('#clearResultBtnEl')
   var imgCountEl = $$('#imgCountEl')
   var blobs = [] // 用于存储 Blob 对象
+
+  // 鼠标默认定位到搜索框
+  searchEl.focus()
   
   // 更新图片计数显示
   if (imgCountEl) {

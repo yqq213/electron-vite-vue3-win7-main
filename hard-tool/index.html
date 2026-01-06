@@ -8,9 +8,10 @@
   <link rel="stylesheet" href="./css/index.css">
   <script src="./js/common.js"></script>
   <script src="./js/http.js"></script>
-  <script src="./js/index.js"></script>
   <script>
-    
+    var script = document.createElement('script');
+    script.src = './js/index.js?v=' + new Date().getTime();
+    document.head.appendChild(script);
   </script>
   <title>数据录入</title>
 </head>

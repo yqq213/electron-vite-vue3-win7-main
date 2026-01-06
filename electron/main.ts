@@ -54,8 +54,8 @@ function createWindow() {
     //版本更新
   })
 
-  win.loadURL(configJson.h5Url)
-  // win.loadFile('hard-tool/index.html')
+  // win.loadURL(configJson.h5Url)
+  win.loadFile('hard-tool/index.html')
 
   if (VITE_DEV_SERVER_URL) {
     // win.loadURL(VITE_DEV_SERVER_URL)
